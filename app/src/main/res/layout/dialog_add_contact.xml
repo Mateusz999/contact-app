@@ -1,0 +1,42 @@
+<!-- res/layout/dialog_add_contact.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <EditText
+        android:id="@+id/inputFirstName"
+        android:hint="Imię"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/inputLastName"
+        android:hint="Nazwisko"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/inputEmployerCompanyName"
+        android:hint="Nazwa firmy"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/inputJobTitle"
+        android:hint="Stanowisko"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/inputPhoneNumber"
+        android:hint="Number Telefonu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/inputEmailAddress"
+        android:hint="Adres Email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>
