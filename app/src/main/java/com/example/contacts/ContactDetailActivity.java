@@ -42,7 +42,7 @@ public class ContactDetailActivity extends AppCompatActivity {
         phone.setText("📞 " + contact.getPhoneNumber());
         email.setText("✉️ " + contact.getEmailAddress());
 
-
+//
         btnEdit.setOnClickListener(v -> {
             // okno edycji do dodania
         });
