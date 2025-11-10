@@ -55,6 +55,17 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }
+                if (result.getResultCode() == RESULT_FIRST_USER) {
+                    Intent data = result.getData();
+                    int contactIndex = data.getIntExtra("contactIndex", -1);
+                    Contact edited = (Contact) data.getSerializableExtra("editedContact");
+                    if (contactIndex != -1 && edited != null) {
+                        reader.getContacts().set(contactIndex, edited); // podmiana kontaktu
+                        writer.saveToFile(this);
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+
             });
 
 
@@ -90,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
             Contact selected = adapter.getItem(position);
             Intent intent = new Intent(MainActivity.this, ContactDetailActivity.class);
             intent.putExtra("contact",selected);
+            intent.putExtra("contactIndex", position);
             detailLauncher.launch(intent);
 
         });
