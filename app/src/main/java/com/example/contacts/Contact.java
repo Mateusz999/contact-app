@@ -1,6 +1,7 @@
 package com.example.contacts;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Contact implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -43,4 +44,22 @@ public class Contact implements Serializable {
     public String toString() {
         return firstName + " " + lastName;
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Contact)) return false;
+        Contact other = (Contact) o;
+        return Objects.equals(firstName, other.firstName)
+                && Objects.equals(lastName, other.lastName)
+                && Objects.equals(phoneNumber, other.phoneNumber)
+                && Objects.equals(emailAddress, other.emailAddress);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName, lastName, phoneNumber, emailAddress);
+    }
+
 }

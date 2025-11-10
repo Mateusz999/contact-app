@@ -82,4 +82,15 @@
             android:layout_marginStart="16dp"
             android:padding="12dp"/>
     </LinearLayout>
+    <TextView
+        android:id="@+id/btnDelete"
+        android:text="Usuń kontakt"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/holo_red_dark"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="32dp"
+        android:paddingBottom="8dp"/>
 </LinearLayout>

@@ -2,13 +2,17 @@ package com.example.contacts;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -16,6 +20,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.contacts.Interfaces.IContactReader;
+import com.example.contacts.Interfaces.IContactRemover;
 import com.example.contacts.Interfaces.IContactWriter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -28,11 +33,29 @@ public class MainActivity extends AppCompatActivity {
     private ContactRepository repository;
     private IContactReader reader;
     private IContactWriter writer;
+    private IContactRemover remover;
     private ArrayAdapter<Contact> adapter;
     private static String capitalize(String s) {
         if (s == null || s.isEmpty()) return s;
         return s.substring(0, 1).toUpperCase() + s.substring(1);
     }
+
+    private final ActivityResultLauncher<Intent> detailLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result ->{
+                if(result.getResultCode() == RESULT_OK){
+                    Intent data = result.getData();
+                    if(data !=null){
+                        Contact deleted = (Contact) data.getSerializableExtra("deleteContact");
+                        if(deleted !=null){
+                            ContactRepository.getInstance().removeContact(deleted);
+                            ContactRepository.getInstance().saveToFile(this);
+                            adapter.notifyDataSetChanged();
+                        }
+                    }
+                }
+            });
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,12 +68,12 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        repository = new ContactRepository();
+        repository = ContactRepository.getInstance();
         reader = repository;
         writer = repository;
+        remover = repository;
 
         reader.loadFromFile(this);
-
 
         ListView widokListy = (ListView) findViewById(R.id.listaKontaktow);
         adapter = new ArrayAdapter<Contact>(this, android.R.layout.simple_list_item_1,reader.getContacts());
@@ -64,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
             Contact selected = adapter.getItem(position);
             Intent intent = new Intent(MainActivity.this, ContactDetailActivity.class);
             intent.putExtra("contact",selected);
-            startActivity(intent);
+            detailLauncher.launch(intent);
 
         });
 

@@ -9,8 +9,9 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-public class ContactDetailActivity extends AppCompatActivity {
+import com.example.contacts.Interfaces.IContactRemover;
 
+public class ContactDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle saveInstanceState){
         super.onCreate(saveInstanceState);
@@ -24,6 +25,7 @@ public class ContactDetailActivity extends AppCompatActivity {
         ImageButton btnCall = findViewById(R.id.btnCall);
         Button btnEdit = findViewById(R.id.btnEdit);
         Button btnCancel = findViewById(R.id.btnCancel);
+        TextView btnDelete = findViewById(R.id.btnDelete);
 
 
         Contact contact = (Contact) getIntent().getSerializableExtra("contact");
@@ -31,6 +33,16 @@ public class ContactDetailActivity extends AppCompatActivity {
             finish();
             return;
         }
+
+
+        btnDelete.setOnClickListener( v ->{
+            Intent result = new Intent();
+            result.putExtra("deleteContact",contact);
+            setResult(RESULT_OK,result);
+            finish();
+        });
+
+
         btnCall.setOnClickListener(v -> {
             Intent callIntent = new Intent(Intent.ACTION_DIAL);
             callIntent.setData(Uri.parse("tel:" + contact.getPhoneNumber()));
