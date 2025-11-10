@@ -19,15 +19,10 @@ import java.util.List;
 public class ContactRepository implements IContactWriter, IContactReader, IContactRemover, Serializable {
     private List<Contact> contacts= new ArrayList<>();
     private static final String FILE_NAME = "contacts.dat";
-    private static ContactRepository instance;
 
-    private ContactRepository() { }
+    public  ContactRepository() { }
 
-    public static ContactRepository getInstance(){
-        if(instance == null)
-            instance = new ContactRepository();
-        return instance;
-    }
+
 
 
 

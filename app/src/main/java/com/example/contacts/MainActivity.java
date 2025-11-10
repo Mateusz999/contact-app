@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
@@ -47,9 +48,10 @@ public class MainActivity extends AppCompatActivity {
                     if(data !=null){
                         Contact deleted = (Contact) data.getSerializableExtra("deleteContact");
                         if(deleted !=null){
-                            ContactRepository.getInstance().removeContact(deleted);
-                            ContactRepository.getInstance().saveToFile(this);
+                            remover.removeContact(deleted);
+                            writer.saveToFile(this);
                             adapter.notifyDataSetChanged();
+
                         }
                     }
                 }
@@ -68,10 +70,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        repository = ContactRepository.getInstance();
+        repository = new ContactRepository();
         reader = repository;
         writer = repository;
         remover = repository;
+
 
         reader.loadFromFile(this);
 
@@ -111,6 +114,10 @@ public class MainActivity extends AppCompatActivity {
                     EditText phoneNumberInput = dialogView.findViewById(R.id.inputPhoneNumber);
                     EditText emailAddressInput = dialogView.findViewById(R.id.inputEmailAddress);
 
+                    if (firstNameInput.getText().toString().isEmpty() || phoneNumberInput.getText().toString().isEmpty()) {
+                        Toast.makeText(this, "Imię i numer telefonu są wymagane", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
                     Contact newContact = ContactFactory.create(
                             firstNameInput.getText().toString(),
