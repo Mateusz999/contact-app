@@ -45,7 +45,6 @@ public class Contact implements Serializable {
         return firstName + " " + lastName;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

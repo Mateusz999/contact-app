@@ -22,10 +22,6 @@ public class ContactRepository implements IContactWriter, IContactReader, IConta
 
     public  ContactRepository() { }
 
-
-
-
-
     @Override
     public void addContact(Contact contact){
         contacts.add(contact);

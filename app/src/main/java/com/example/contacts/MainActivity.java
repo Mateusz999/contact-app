@@ -2,19 +2,12 @@ package com.example.contacts;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -23,14 +16,12 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.contacts.Interfaces.IContactReader;
 import com.example.contacts.Interfaces.IContactRemover;
 import com.example.contacts.Interfaces.IContactWriter;
+import com.example.contacts.Utils.DialogManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
+    private DialogManager dialogManager;
     private ContactRepository repository;
     private IContactReader reader;
     private IContactWriter writer;
@@ -85,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         reader = repository;
         writer = repository;
         remover = repository;
-
+        dialogManager = new DialogManager();
 
         reader.loadFromFile(this);
 
@@ -94,8 +85,7 @@ public class MainActivity extends AppCompatActivity {
         widokListy.setAdapter(adapter);
 
         FloatingActionButton fab = findViewById(R.id.fabPlus);
-        fab.setOnClickListener( v -> showAddContactDialog());
-
+        fab.setOnClickListener( v -> dialogManager.showAddContactDialog(this,writer,adapter));
 
         widokListy.setOnItemClickListener((parent, view, position, id)-> {
             Contact selected = adapter.getItem(position);
@@ -105,48 +95,5 @@ public class MainActivity extends AppCompatActivity {
             detailLauncher.launch(intent);
 
         });
-
-
-
-
-    }
-
-    private void showAddContactDialog(){
-        LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
-        View dialogView = inflater.inflate(R.layout.dialog_add_contact,null);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-        builder.setView(dialogView)
-                .setTitle("Dodaj Kontakt")
-                .setPositiveButton("Zapisz",(dialog, which) -> {
-                    EditText firstNameInput = dialogView.findViewById(R.id.inputFirstName);
-                    EditText lastNameInput = dialogView.findViewById(R.id.inputLastName);
-                    EditText emplerCompanyNameInput = dialogView.findViewById(R.id.inputEmployerCompanyName);
-                    EditText jobTitleInput = dialogView.findViewById(R.id.inputJobTitle);
-                    EditText phoneNumberInput = dialogView.findViewById(R.id.inputPhoneNumber);
-                    EditText emailAddressInput = dialogView.findViewById(R.id.inputEmailAddress);
-
-                    if (firstNameInput.getText().toString().isEmpty() || phoneNumberInput.getText().toString().isEmpty()) {
-                        Toast.makeText(this, "Imię i numer telefonu są wymagane", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    Contact newContact = ContactFactory.create(
-                            firstNameInput.getText().toString(),
-                            lastNameInput.getText().toString(),
-                            emplerCompanyNameInput.getText().toString(),
-                            jobTitleInput.getText().toString(),
-                            phoneNumberInput.getText().toString(),
-                            emailAddressInput.getText().toString()
-
-                    );
-                    writer.addContact(newContact);
-                    writer.saveToFile(this);
-                    adapter.notifyDataSetChanged();
-
-
-                })
-                .setNegativeButton("Anuluj", (dialog, which) -> dialog.dismiss())
-                .show();
     }
 }
