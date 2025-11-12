@@ -78,7 +78,7 @@ private Contact contact;
                 EditText phoneNumberInput = dialogView.findViewById(R.id.inputPhoneNumber);
                 EditText emailAddressInput = dialogView.findViewById(R.id.inputEmailAddress);
 
-                // ✅ Wypełnij pola istniejącymi danymi
+               
                 firstNameInput.setText(contact.getFirstName());
                 lastNameInput.setText(contact.getLastName());
                 employerCompanyNameInput.setText(contact.getEmployerCompanyName());
